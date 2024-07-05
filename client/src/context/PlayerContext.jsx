@@ -7,6 +7,7 @@ const PlayerProvider = ({ children }) => {
   const audioRef = useRef();
   const seekBg = useRef();
   const seekBar = useRef();
+  const volumeBar = useRef(); // Ref for volume bar
 
   const [track, setTrack] = useState(songsData[0]);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -14,6 +15,7 @@ const PlayerProvider = ({ children }) => {
     currentTime: { second: 0, minute: 0 },
     totalTime: { second: 0, minute: 0 },
   });
+  const [volume, setVolume] = useState(0.4); // State for volume control
 
   // Function to format time with leading zeros
   const formatTime = time => {
@@ -25,6 +27,10 @@ const PlayerProvider = ({ children }) => {
   useEffect(() => {
     const audio = audioRef.current;
 
+    // Set initial volume
+    audio.volume = volume;
+
+    // Function to update seek bar and time on timeupdate event
     const updateSeekBar = () => {
       const currentTime = audio.currentTime;
       const duration = audio.duration;
@@ -54,7 +60,7 @@ const PlayerProvider = ({ children }) => {
     return () => {
       audio.removeEventListener("timeupdate", updateSeekBar);
     };
-  }, []);
+  }, [volume]);
 
   const play = () => {
     audioRef.current.play();
@@ -88,6 +94,27 @@ const PlayerProvider = ({ children }) => {
     playWithId(randomIndex);
   };
 
+  // Function to handle seeking within the song
+  const seekSong = e => {
+    const clickPosition = e.nativeEvent.offsetX;
+    const barWidth = seekBg.current.offsetWidth;
+    const duration = audioRef.current.duration;
+
+    // Calculate the new currentTime based on click position
+    audioRef.current.currentTime = (clickPosition / barWidth) * duration;
+  };
+
+  // Function to handle volume control
+  const volumeControl = e => {
+    const clickPosition = e.nativeEvent.offsetX;
+    const barWidth = volumeBar.current.offsetWidth;
+
+    // Calculate the new volume based on click position
+    const newVolume = clickPosition / barWidth;
+    audioRef.current.volume = newVolume;
+    setVolume(newVolume);
+  };
+
   return (
     <PlayerContext.Provider
       value={{
@@ -109,6 +136,10 @@ const PlayerProvider = ({ children }) => {
         prevPlay,
         nextPlay,
         playShuffle,
+        seekSong,
+        volumeControl,
+        volume,
+        volumeBar,
       }}
     >
       {children}

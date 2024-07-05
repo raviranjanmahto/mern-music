@@ -13,6 +13,10 @@ const Player = () => {
     prevPlay,
     nextPlay,
     playShuffle,
+    seekSong,
+    volumeControl,
+    volume,
+    volumeBar,
   } = usePlayer();
 
   return (
@@ -70,11 +74,12 @@ const Player = () => {
           <p>{time.currentTime}</p>
           <div
             ref={seekBg}
+            onClick={seekSong}
             className='w-[60vw] max-w-[500px] bg-gray-300 rounded-full cursor-pointer'
           >
             <hr
               ref={seekBar}
-              className='h-1 border-none w-0 bg-green-800 rounded-full'
+              className='h-2 border-none w-0 bg-green-800 rounded-full'
             />
           </div>
           <p>{time.totalTime}</p>
@@ -86,7 +91,16 @@ const Player = () => {
         <img className='w-4' src={assets.queue_icon} alt='' />
         <img className='w-4' src={assets.speaker_icon} alt='' />
         <img className='w-4' src={assets.volume_icon} alt='' />
-        <div className='w-20 bg-slate-50 h-1 rounded'></div>
+        <div
+          onClick={volumeControl}
+          ref={volumeBar}
+          className='w-20 bg-slate-50 h-2 rounded cursor-pointer'
+        >
+          <div
+            className='h-full bg-green-800 rounded-full'
+            style={{ width: `${volume * 100}%` }}
+          ></div>
+        </div>
         <img className='w-4' src={assets.mini_player_icon} alt='' />
         <img className='w-4' src={assets.zoom_icon} alt='' />
       </div>
