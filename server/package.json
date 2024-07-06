@@ -1,0 +1,28 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "MERN Music",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raviranjanmahto/mern-music.git"
+  },
+  "author": "Raviranjan Mahto",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/raviranjanmahto/mern-music/issues"
+  },
+  "homepage": "https://github.com/raviranjanmahto/mern-music#readme",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.4.5",
+    "multer": "^1.4.5-lts.1"
+  }
+}
