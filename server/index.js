@@ -5,6 +5,7 @@ import dbConnect from "./config/dbConnect.js";
 import AppError from "./utils/appError.js";
 import globalErrorHandler from "./middlewares/errorMiddleware.js";
 import songRoute from "./routes/songRoute.js";
+import albumRoute from "./routes/albumRoute.js";
 import cloudinaryConnect from "./config/cloudinary.js";
 
 const PORT = process.env.PORT || 7017;
@@ -28,6 +29,7 @@ app.get("/", (req, res) => {
 
 // Routes
 app.use("/api/v1/song", songRoute);
+app.use("/api/v1/album", albumRoute);
 
 // 404 error handler for all other routes
 app.all("*", (req, res, next) =>
