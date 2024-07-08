@@ -3,34 +3,22 @@ import { assets } from "../assets/assets";
 import axios from "axios";
 import { toast } from "react-toastify";
 
+const URL = import.meta.env.VITE_APP_BACKEND_URL;
+
 const AddSong = () => {
   const [image, setImage] = useState(false);
   const [audio, setAudio] = useState(false);
-  const [name, setName] = useState("");
-  const [desc, setDesc] = useState("");
-  const [album, setAlbum] = useState("none");
   const [loading, setLoading] = useState(false);
   const [albumData, setAlbumData] = useState([]);
 
-  const URL = import.meta.env.VITE_APP_BACKEND_URL;
-
-  const onSubmitHandler = async e => {
+  const handleFormSubmit = async e => {
     e.preventDefault();
+    setLoading(true);
     try {
-      setLoading(true);
-      const formData = new FormData();
-      formData.append("image", image);
-      formData.append("audio", audio);
-      formData.append("name", name);
-      formData.append("desc", desc);
-      formData.append("album", album);
-
+      const formData = new FormData(e.target);
       const response = await axios.post(`${URL}/api/v1/song/add`, formData);
       if (response.status === 201) {
         toast.success("Song added successfully.");
-        setName("");
-        setDesc("");
-        setAlbum("none");
         setImage(false);
         setAudio(false);
       }
@@ -51,7 +39,7 @@ const AddSong = () => {
     };
 
     loadAlbumData();
-  }, [URL]);
+  }, []);
 
   if (loading)
     return (
@@ -62,7 +50,7 @@ const AddSong = () => {
 
   return (
     <form
-      onSubmit={onSubmitHandler}
+      onSubmit={handleFormSubmit}
       className='flex flex-col items-start gap-8 text-gray-800'
     >
       <div className='flex gap-8'>
@@ -74,6 +62,7 @@ const AddSong = () => {
             id='song'
             accept='audio/*'
             hidden
+            name='audio'
             required
           />
           <label htmlFor='song'>
@@ -92,6 +81,7 @@ const AddSong = () => {
             id='image'
             accept='image/*'
             hidden
+            name='image'
             required
           />
           <label htmlFor='image'>
@@ -109,33 +99,30 @@ const AddSong = () => {
       <div className='flex flex-col gap-2.5'>
         <p>Song name*</p>
         <input
-          onChange={e => setName(e.target.value)}
-          value={name}
           className='bg-transparent outline-green-600 border-2 border-gray-400 p-2.5 w-[max(40vw,250px)]'
+          type='text'
+          name='name'
           placeholder='Enter song name here'
           required
-          type='text'
         />
       </div>
 
       <div className='flex flex-col gap-2.5'>
         <p>Song description*</p>
         <input
-          onChange={e => setDesc(e.target.value)}
-          value={desc}
           className='bg-transparent outline-green-600 border-2 border-gray-400 p-2.5 w-[max(40vw,250px)]'
+          type='text'
+          name='desc'
           placeholder='Enter song description here'
           required
-          type='text'
         />
       </div>
 
       <div className='flex flex-col gap-2.5'>
         <p>Album*</p>
         <select
-          onChange={e => setAlbum(e.target.value)}
-          defaultValue={album}
           className='bg-transparent outline-green-600 border-2 border-gray-400 p-2.5 w-[max(40vw,250px)]'
+          name='album'
           required
         >
           <option value=''>Select from below</option>
